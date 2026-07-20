@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Notanizer</title>
+        <link rel="stylesheet" href="{% static 'style.css' %}" />
+        <link rel="stylesheet" href="{% static 'output.css' %}" />
+    </head>
+    <body class="bg-white">
+        <div class="flex h-screen">
+
+            <!-- Sidebar -->
+            <aside class="w-96 bg-white border-r border-gray-200 overflow-y-auto p-4 flex flex-col h-screen">
+                <div class="flex-1 w-full">
+                    <h1 class="text-xl text-gray-900 font-bold mr-auto py-8">Notanizer</h1>
+                    <input type="text" placeholder="Search notes here" 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-400">
+                    <div class="flex items-center justify-between mt-4 w-full">
+                        <p class="text-xl font-semibold justify-start">My Courses</p>
+                        <a href="#" class="bg-blue-400 hover:bg-blue-500 text-black rounded-lg block text-center font-medium px-4 py-2 ml-auto"> 
+                                        + New Course
+                        </a>
+                    </div>
+
+                    <!-- Course List(Tree structure) -->
+                    <div class="mt-4 space-y-4 justify-between overflow-y-auto">
+                        {% for course in courses %}
+                        <div class="course-item overflow-hidden">
+                            <div class="course-header bg-gray-50 flex items-center justify-between hover:bg-gray-100 cursor-pointer " onclick="toggleCourse(this)">
+                                <div class="flex flex-1 items-center gap-2">
+                                    <span class="toggle text-gray-500">▼</span>
+                                    <a href="#" class="flex-1 font-semibold text-gray-900 hover:text-blue-700">
+                                        {{ course.title }}
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Notes in Course -->
+                            <div class="notes open bg-white">
+                                {% for note in course.notes.all %}
+                                <a href="#" class="note-item block px-6 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-blue-600 border-l-2 border-transparent hover:border-blue-600">
+                                    • {{ note.title }}
+                                </a>
+                                {% empty %}
+                                <p class="px-6 py-2 text-xs text-gray-400">No notes yet</p>
+                                {% endfor %}
+
+                                <!-- Add note button -->
+                                <a href="#" class="block py-2 px-6 text-xs text-blue-500 hover:bg-blue-50 font-medium">
+                                    ﹢ Add Note
+                                </a>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="text-center text-gray-400 py-8">
+                            No courses yet
+                        </p>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main content -->
+            <main class="flex-1 overflow-y-auto p-8">
+            {% block content %}
+            {% endblock %}
+            </div>
+    </body>
+</html>

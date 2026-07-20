@@ -1,0 +1,33 @@
+/* Sidebar Toggle */
+
+input[type="checkbox"] {
+    display: none;
+}
+
+.notes {
+    display: none;
+}
+
+input[type="checkbox"]:checked ~ .notes {
+    display: block;
+}
+
+.toggle {
+    color: #6d7583;
+    font-size: 12px;
+    min-width: 20px;
+}
+
+input[type="checkbox"]:not(:checked) ~ .course-header .toggle::before {
+    content: '▶︎';
+}
+
+.course-header {
+    transition: background-color 0.3s ease;
+}
+
+.notes {
+    transition: all 0.2s ease-out;
+}
+
+
