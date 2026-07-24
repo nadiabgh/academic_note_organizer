@@ -10,63 +10,89 @@
     </head>
     <body class="bg-white">
         <div class="flex h-screen">
+            <!--========== Sidebar ==========-->
+            <!-- Top -->
+            <aside class="w-72 bg-slate-100 border-r border-gray-200 flex flex-col h-screen">
+                <div class="flex-1 overflow-y-auto min-h-0 p-4">
+                    <h1 class="text-3xl text-gray-900 font-bold mr-auto py-8">Notanizer</h1>
+                    <!-- Search bar -->
+                    <div class="relative mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" 
+                            fill="none" 
+                            viewBox="0 0 24 24" 
+                            stroke-width="1.5" 
+                            stroke="currentColor" 
+                            class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none">
+                            <path stroke-linecap="round" 
+                            stroke-linejoin="round" 
+                            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                        </svg>
+                        <input type="text" placeholder="Search" 
+                        class="w-full px-4 py-1 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-400">
+                    </div>
 
-            <!-- Sidebar -->
-            <aside class="w-96 bg-white border-r border-gray-200 overflow-y-auto p-4 flex flex-col h-screen">
-                <div class="flex-1 w-full">
-                    <h1 class="text-xl text-gray-900 font-bold mr-auto py-8">Notanizer</h1>
-                    <input type="text" placeholder="Search notes here" 
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-400">
-                    <div class="flex items-center justify-between mt-4 w-full">
-                        <p class="text-xl font-semibold justify-start">My Courses</p>
-                        <a href="#" class="bg-blue-400 hover:bg-blue-500 text-black rounded-lg block text-center font-medium px-4 py-2 ml-auto"> 
-                                        + New Course
+                    <!--My courses-->
+                    <div class="flex items-center justify-between mt-8 w-full">
+                        <h1 class="text-xl font-semibold justify-start">My Courses</h1>
+                        <a href="{% url 'create_course' %}" class="bg-blue-400 hover:bg-blue-500 text-black rounded-lg block text-center font-medium px-4 py-1 ml-auto"> 
+                            + New 
                         </a>
                     </div>
 
                     <!-- Course List(Tree structure) -->
                     <div class="mt-4 space-y-4 justify-between overflow-y-auto">
                         {% for course in courses %}
-                        <div class="course-item overflow-hidden">
-                            <div class="course-header bg-gray-50 flex items-center justify-between hover:bg-gray-100 cursor-pointer " onclick="toggleCourse(this)">
+                            <input type="checkbox" id="course-{{ course.id }}" class="hidden" unchecked>
+                            <label for="course-{{ course.id }}" class="course-header bg-gray-50 flex items-center justify-between hover:bg-gray-100 cursor-pointer p-3 rounded-lg">
                                 <div class="flex flex-1 items-center gap-2">
-                                    <span class="toggle text-gray-500">▼</span>
-                                    <a href="#" class="flex-1 font-semibold text-gray-900 hover:text-blue-700">
+                                    <span class="toggle text-gray-500"></span>
+                                    <a href="{% url 'course_detail' course.id %}" class="px-4 text-sm text-gray-900 hover:text-blue-700">
                                         {{ course.title }}
                                     </a>
                                 </div>
-                            </div>
+                            </label>
 
-                            <!-- Notes in Course -->
-                            <div class="notes open bg-white">
+                            <!-- Notes -->
+                            <div class="notes" id="notes-{{ course.id }}">
                                 {% for note in course.notes.all %}
-                                <a href="#" class="note-item block px-6 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-blue-600 border-l-2 border-transparent hover:border-blue-600">
-                                    • {{ note.title }}
-                                </a>
+                                    <a href="{% url 'note_detail' note.id %}" class="block px-4 py-6 text-sm text-gray-700 hover:bg-blue-500 hover:text-blue-600 border-l-2 border-transparent hover:border-blue-600">
+                                        • {{ note.title }}
+                                    </a>
                                 {% empty %}
-                                <p class="px-6 py-2 text-xs text-gray-400">No notes yet</p>
+                                <p class="px-6 text-xs text-gray-400">No notes yet</p>
                                 {% endfor %}
-
-                                <!-- Add note button -->
-                                <a href="#" class="block py-2 px-6 text-xs text-blue-500 hover:bg-blue-50 font-medium">
+                                <a href="{% url 'create_note' course.id %}" class="block py-2 px-6 text-xs text-blue-500 hover:bg-blue-50 font-medium">
                                     ﹢ Add Note
                                 </a>
                             </div>
-                        </div>
                         {% empty %}
                         <p class="text-center text-gray-400 py-8">
                             No courses yet
                         </p>
                         {% endfor %}
-
                     </div>
+                </div>
+
+                <!-- Bottom -->
+                <div class="border-t border-gray-200 p-4 mt-auto">
+                    <span class="block text-gray-700">
+                        {{ request.user.username }}
+                    </span>
+
+                    <form action="{% url 'logout' %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="bg-transparent border-none text-red-600 hover:text-red-700 p-0">
+                            Logout
+                        </button>
+                    </form>
                 </div>
             </aside>
 
-            <!-- Main content -->
-            <main class="flex-1 overflow-y-auto p-8">
+            <!--========== Main content ==========-->
+            <main class="bg-slate-50 flex-1 overflow-y-auto p-8">
             {% block content %}
             {% endblock %}
+            </main>
             </div>
     </body>
 </html>

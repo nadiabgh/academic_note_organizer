@@ -13,13 +13,19 @@ input[type="checkbox"]:checked ~ .notes {
 }
 
 .toggle {
-    color: #6d7583;
+    color: #464950;
     font-size: 12px;
     min-width: 20px;
+    display: inline-block;
+    transition: 0.2s ease-in;
 }
 
 input[type="checkbox"]:not(:checked) ~ .course-header .toggle::before {
-    content: '▶︎';
+    content: "▶";
+}
+
+input[type="checkbox"]:checked ~ .course-header .toggle::before {
+    content: "▼";
 }
 
 .course-header {
@@ -30,4 +36,20 @@ input[type="checkbox"]:not(:checked) ~ .course-header .toggle::before {
     transition: all 0.2s ease-out;
 }
 
+/* Course Card Animation */
 
+.course-card {
+    transition: transform 0.2s ease-out,
+                box-shadow 0.2s ease-out,
+                border-color 0.2s ease-out;
+}
+
+.course-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    border-color: #93c5fd;
+}
+
+.course-card:active {
+    transform: translateY(-2px) scale(0.98);
+}

@@ -21,6 +21,6 @@ class Note(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     def __str__(self):
-        return self.username
+        return self.title
 
 
