@@ -8,11 +8,11 @@
         <link rel="stylesheet" href="{% static 'style.css' %}" />
         <link rel="stylesheet" href="{% static 'output.css' %}" />
     </head>
-    <body class="bg-white">
-        <div class="flex h-screen">
+    <body class="bg-slate-50 m-0">
+        <div class="flex h-screen w-screen">
             <!--========== Sidebar ==========-->
             <!-- Top -->
-            <aside class="w-72 bg-slate-100 border-r border-gray-200 flex flex-col h-screen">
+            <aside class="bg-slate-100 w-72 border-r border-gray-200 flex flex-col">
                 <div class="flex-1 overflow-y-auto min-h-0 p-4">
                     <h1 class="text-3xl text-gray-900 font-bold mr-auto py-8">Notanizer</h1>
                     <!-- Search bar -->
@@ -43,14 +43,11 @@
                     <div class="mt-4 space-y-4 justify-between overflow-y-auto">
                         {% for course in courses %}
                             <input type="checkbox" id="course-{{ course.id }}" class="hidden" unchecked>
-                            <label for="course-{{ course.id }}" class="course-header bg-gray-50 flex items-center justify-between hover:bg-gray-100 cursor-pointer p-3 rounded-lg">
-                                <div class="flex flex-1 items-center gap-2">
-                                    <span class="toggle text-gray-500"></span>
-                                    <a href="{% url 'course_detail' course.id %}" class="px-4 text-sm text-gray-900 hover:text-blue-700">
-                                        {{ course.title }}
-                                    </a>
-                                </div>
-                            </label>
+                            <div class="course-header bg-gray-50 flex items-center justify-between p-3 rounded-lg">
+                                <a href="{% url 'course_detail' course.id %}" class="text-gray-900 hover:text-blue-700">
+                                    {{ course.title }}
+                                </a>
+                            </div>
 
                             <!-- Notes -->
                             <div class="notes" id="notes-{{ course.id }}">
@@ -89,7 +86,7 @@
             </aside>
 
             <!--========== Main content ==========-->
-            <main class="bg-slate-50 flex-1 overflow-y-auto p-8">
+            <main id="main-content" class="flex-1 bg-slate-50 min-w-0 p-8">
             {% block content %}
             {% endblock %}
             </main>

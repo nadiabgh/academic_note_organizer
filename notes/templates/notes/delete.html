@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="max-w-lg mx-auto mt-10">
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-8">
+        <h1 class="text-3xl font-semibold text-gray-900 mb-6">Deleting {{ note.title }}...</h1>
+        <div class="rounded-lg mb-8">
+            <p class="text-gray-700">Are you sure you want to delete the note named <span class="font-semibold">{{ note.title }}</span>?</p>
+        </div>
+        <div class="flex justify-center gap-4">
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" class="bg-red-500 hover:bg-red-600 font-medium px-6 py-2 rounded-lg">
+                    Delete
+                </button>
+            </form>
+            <a href="{% url 'note_detail' note.id  %}" class="bg-gray-300 hover:bg-gray-400 font-medium px-6 py-2 rounded-lg">
+                Cancel
+            </a>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

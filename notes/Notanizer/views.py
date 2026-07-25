@@ -27,7 +27,7 @@ def course_detail(request, course_id):
 
 @login_required
 def note_detail(request, note_id):
-    note = get_object_or_404(Note, id=note_id, author=request.user)
+    note = get_object_or_404(Note, id=note_id, course__author=request.user)
     return render(request, 'notes/detail.html', {'note': note})
 
 @login_required
@@ -65,7 +65,7 @@ def delete_course(request, course_id):
 
 @login_required
 def create_note(request, course_id):
-    course = get_object_or_404(Note, id=course_id, author = request.user)
+    course = get_object_or_404(Course, id=course_id, author = request.user)
     if request.method == "POST":
         form = NoteForm(request.POST, request.FILES)
         if form.is_valid():
@@ -73,9 +73,9 @@ def create_note(request, course_id):
             note.course = course
             note.save()
             return redirect('course_detail', course_id=course.id)
-        else:
-            form = NoteForm()
-        return render(request, 'notes/form.html', {'form': form, 'course': course})
+    else:
+        form = NoteForm()
+    return render(request, 'notes/form.html', {'form': form, 'course': course})
 
 @login_required
 def edit_note(request, note_id):
@@ -95,5 +95,5 @@ def delete_note(request, note_id):
     if request.method == 'POST':
         course_id = note.course.id
         note.delete()
-        return redirect('course_detail', course__author=request.user)
+        return redirect('course_detail', course_id = course_id)
     return render(request, 'notes/delete.html', {'note': note})

@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-<div class="max-w-4xl">
+<div class="w-full">
 
     <!-- Breadcrumb -->
     <div class="mb-2">
@@ -24,7 +24,7 @@
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 mb-8">
             {% for note in course.notes.all %}
                 <a href="{% url 'note_detail' note.id %}" class="course-card bg-white rounded-lg border border-gray-200 overflow-hidden mt-4">
-                    <img src="{% static 'covers/Note.jpg'%}" alt="{{ note.title }}" class="w-full h-48 object-cover">
+                    <img src="{% static 'covers/Notes.jpg'%}" alt="{{ note.title }}" class="w-full h-48 object-cover">
                     <p class="mt-4 font-semi-bold text-blue-900 text-center px-2">{{ note.title }}</p>
                     <div class="flex justify-between items-center text-sm text-gray-500">
                         <p class="mt-3 text-xs text-center text-gray-400 mb-2 ml-4">{{ note.created|date:"M d, Y" }}</p>
