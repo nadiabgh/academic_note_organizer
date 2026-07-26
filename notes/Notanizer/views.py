@@ -5,10 +5,12 @@ from django.contrib.auth.views import LoginView
 from .forms import CustomAuthenticationForm, CustomUserCreationForm, CourseForm, NoteForm
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
+from django.db.models import Q
 
+    
 @login_required
 def home(request):
-    courses = Course.objects.order_by('-created')
+    courses = Course.objects.filter(author=request.user).order_by('-created')
     return render(request, 'courses/list.html', {'courses': courses})
 
 class CustomLoginView(LoginView):
@@ -23,15 +25,18 @@ class CustomSignUpView(CreateView):
 @login_required
 def course_detail(request, course_id):
     course = get_object_or_404(Course, id=course_id, author=request.user)
-    return render(request, 'courses/detail.html', {'course': course})
+    courses = Course.objects.filter(author=request.user)
+    return render(request, 'courses/detail.html', {'course': course, 'courses': courses})
 
 @login_required
 def note_detail(request, note_id):
     note = get_object_or_404(Note, id=note_id, course__author=request.user)
-    return render(request, 'notes/detail.html', {'note': note})
+    courses = Course.objects.filter(author=request.user)
+    return render(request, 'notes/detail.html', {'note': note, 'courses': courses})
 
 @login_required
 def create_course(request):
+    courses = Course.objects.filter(author=request.user)
     if request.method == 'POST':
         form = CourseForm(request.POST, request.FILES)
         if form.is_valid():
@@ -41,11 +46,12 @@ def create_course(request):
             return redirect('home')
     else:
         form = CourseForm()
-    return render(request, 'courses/form.html', {'form': form})
+    return render(request, 'courses/form.html', {'form': form, 'courses': courses})
 
 @login_required
 def edit_course(request, course_id):
     course = get_object_or_404(Course, id=course_id, author=request.user)
+    courses = Course.objects.filter(author=request.user)
     if request.method == 'POST':
         form = CourseForm(request.POST, request.FILES, instance=course)
         if form.is_valid():
@@ -53,19 +59,21 @@ def edit_course(request, course_id):
             return redirect('course_detail', course_id=course.id)
     else:
         form = CourseForm(instance=course)
-    return render(request, 'courses/form.html', {'form': form})
+    return render(request, 'courses/form.html', {'form': form, 'course': course, 'courses': courses})
 
 @login_required
 def delete_course(request, course_id):
     course = get_object_or_404(Course, id=course_id, author=request.user)
+    courses = Course.objects.filter(author=request.user)
     if request.method == 'POST':
         course.delete()
         return redirect('home')
-    return render(request, 'courses/delete.html', {'course': course})
+    return render(request, 'courses/delete.html', {'course': course, 'courses': courses})
 
 @login_required
 def create_note(request, course_id):
     course = get_object_or_404(Course, id=course_id, author = request.user)
+    courses = Course.objects.filter(author=request.user)
     if request.method == "POST":
         form = NoteForm(request.POST, request.FILES)
         if form.is_valid():
@@ -75,11 +83,12 @@ def create_note(request, course_id):
             return redirect('course_detail', course_id=course.id)
     else:
         form = NoteForm()
-    return render(request, 'notes/form.html', {'form': form, 'course': course})
+    return render(request, 'notes/form.html', {'form': form, 'course': course, 'courses': courses})
 
 @login_required
 def edit_note(request, note_id):
     note = get_object_or_404(Note, id=note_id, course__author = request.user)
+    courses = Course.objects.filter(author=request.user)
     if request.method == 'POST':
         form = NoteForm(request.POST, request.FILES, instance=note)
         if form.is_valid():
@@ -87,13 +96,21 @@ def edit_note(request, note_id):
             return redirect('note_detail', note_id=note.id)
     else:
         form = NoteForm(instance=note)
-    return render(request, 'notes/form.html', {'form': form})
+    return render(request, 'notes/form.html', {'form': form, 'note': note, 'courses': courses})
 
 @login_required
 def delete_note(request, note_id):
     note = get_object_or_404(Note, id=note_id, course__author = request.user)
+    courses = Course.objects.filter(author=request.user)
     if request.method == 'POST':
         course_id = note.course.id
         note.delete()
         return redirect('course_detail', course_id = course_id)
-    return render(request, 'notes/delete.html', {'note': note})
+    return render(request, 'notes/delete.html', {'note': note, 'courses': courses})
+
+@login_required
+def search(request):
+    query = request.GET.get("q", "")
+    courses = Course.objects.filter(author=request.user, title__icontains=query)
+    notes = Note.objects.filter(course__author=request.user).filter(Q(title__icontains=query) | Q(content__icontains=query))
+    return render(request, 'search/result.html', {'query': query, 'courses': courses, 'notes': notes})

@@ -7,6 +7,7 @@
         <title>Notanizer</title>
         <link rel="stylesheet" href="{% static 'style.css' %}" />
         <link rel="stylesheet" href="{% static 'output.css' %}" />
+        <link rel="icon" href="{% static 'Logo/N.jpg' %}" type="image/JPEG">
     </head>
     <body class="bg-slate-50 m-0">
         <div class="flex h-screen w-screen">
@@ -14,53 +15,62 @@
             <!-- Top -->
             <aside class="bg-slate-100 w-72 border-r border-gray-200 flex flex-col">
                 <div class="flex-1 overflow-y-auto min-h-0 p-4">
-                    <h1 class="text-3xl text-gray-900 font-bold mr-auto py-8">Notanizer</h1>
-                    <!-- Search bar -->
-                    <div class="relative mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" 
-                            fill="none" 
-                            viewBox="0 0 24 24" 
-                            stroke-width="1.5" 
-                            stroke="currentColor" 
-                            class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none">
-                            <path stroke-linecap="round" 
-                            stroke-linejoin="round" 
-                            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                        </svg>
-                        <input type="text" placeholder="Search" 
-                        class="w-full px-4 py-1 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-400">
+                    <p class="text-gray-900 text-4xl font-semi-bold mr-auto py-8 mb-10 ml-4">Notanizer</p>
+
+                    <!-- Searchbar -->
+                    <div class="relative mb-4">
+                        <form method="GET" action="{% url 'search' %}">
+                            <button type="submit" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" 
+                                    fill="none" 
+                                    viewBox="0 0 24 24" 
+                                    stroke-width="1.5" 
+                                    stroke="currentColor" 
+                                    class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none">
+                                    <path stroke-linecap="round" 
+                                    stroke-linejoin="round" 
+                                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                                </svg>
+                            </button>
+                            <input type="text" name="q" value="{{ query }}" placeholder="Search" class="w-full px-12 py-1 pl-12 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-400">
+                        </form>
                     </div>
 
                     <!--My courses-->
-                    <div class="flex items-center justify-between mt-8 w-full">
-                        <h1 class="text-xl font-semibold justify-start">My Courses</h1>
+                    <div class="flex items-center justify-between mt-10 w-full">
+                        <p class="text-xl font-semi-bold justify-start">My Courses</p>
                         <a href="{% url 'create_course' %}" class="bg-blue-400 hover:bg-blue-500 text-black rounded-lg block text-center font-medium px-4 py-1 ml-auto"> 
                             + New 
                         </a>
                     </div>
 
                     <!-- Course List(Tree structure) -->
-                    <div class="mt-4 space-y-4 justify-between overflow-y-auto">
+                    <div class="mt-4 justify-between overflow-y-auto">
                         {% for course in courses %}
                             <input type="checkbox" id="course-{{ course.id }}" class="hidden" unchecked>
-                            <div class="course-header bg-gray-50 flex items-center justify-between p-3 rounded-lg">
-                                <a href="{% url 'course_detail' course.id %}" class="text-gray-900 hover:text-blue-700">
-                                    {{ course.title }}
-                                </a>
-                            </div>
+                            <label for="course-{{ course.id }}" class="course-header flex items-center justify-between p-3 rounded-lg">
+                                <div class="flex flex-1 items-center gap-6 rounded-lg bg-blue-100 px-4 py-1">
+                                    <span class="toggle text-gray-400"></span>
+                                    <a href="{% url 'course_detail' course.id %}" class="text-sm text-gray-900 hover:text-blue-700">
+                                        {{ course.title }}
+                                    </a>
+                                    <a href="{% url 'create_note' course.id %}" class="ml-auto p-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </label>
 
                             <!-- Notes -->
                             <div class="notes" id="notes-{{ course.id }}">
                                 {% for note in course.notes.all %}
-                                    <a href="{% url 'note_detail' note.id %}" class="block px-4 py-6 text-sm text-gray-700 hover:bg-blue-500 hover:text-blue-600 border-l-2 border-transparent hover:border-blue-600">
-                                        • {{ note.title }}
+                                    <a href="{% url 'note_detail' note.id %}" class="block rounded-lg px-10 py-1 text-xs text-gray-700 hover:text-blue-700 border-transparent hover:border-blue-600">
+                                        {{ note.title }}
                                     </a>
                                 {% empty %}
                                 <p class="px-6 text-xs text-gray-400">No notes yet</p>
                                 {% endfor %}
-                                <a href="{% url 'create_note' course.id %}" class="block py-2 px-6 text-xs text-blue-500 hover:bg-blue-50 font-medium">
-                                    ﹢ Add Note
-                                </a>
                             </div>
                         {% empty %}
                         <p class="text-center text-gray-400 py-8">
@@ -72,9 +82,14 @@
 
                 <!-- Bottom -->
                 <div class="border-t border-gray-200 p-4 mt-auto">
-                    <span class="block text-gray-700">
-                        {{ request.user.username }}
-                    </span>
+                    <div class="flex mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        </svg>
+                        <span class="ml-4 block text-gray-700">
+                            {{ request.user.username }}
+                        </span>
+                    </div>
 
                     <form action="{% url 'logout' %}" method="POST">
                         {% csrf_token %}
