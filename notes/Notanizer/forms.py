@@ -1,6 +1,7 @@
 from django import forms
 from .models import Course, Note
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 
 class CourseForm(forms.ModelForm):
@@ -15,11 +16,13 @@ class CourseForm(forms.ModelForm):
 class NoteForm(forms.ModelForm):
     class Meta:
         model = Note
-        fields = ['title', 'description', 'content']
+        fields = ['title', 'description', 'content', 'file', 'image']
         widgets = {
             "title": forms.TextInput(attrs={"class": "w-full px-4 py-3 mt-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-blue-400"}),
             "description": forms.Textarea(attrs={"class": "w-full px-4 py-3 mt-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-blue-400 resize-none","rows": 4}),
             "content": forms.Textarea(attrs={"class": "w-full px-4 py-3 mt-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-blue-400 resize-none","rows": 4}),
+            "image": forms.FileInput(attrs={"class": "hidden"}),
+            "file": forms.FileInput(attrs={"class": "hidden"})
         }
 
 class CustomAuthenticationForm(AuthenticationForm):
@@ -31,6 +34,7 @@ class CustomAuthenticationForm(AuthenticationForm):
         "class": "w-full px-4 py-3 mt-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-blue-400"})
         )
 
+User = get_user_model()
 class CustomUserCreationForm(UserCreationForm):
     username = forms.CharField(
         widget=forms.TextInput(attrs={"class": "w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-blue-400"})

@@ -10,12 +10,12 @@
         <link rel="icon" href="{% static 'Logo/N.jpg' %}" type="image/JPEG">
     </head>
     <body class="bg-slate-50 m-0">
-        <div class="flex h-screen w-screen">
+        <div class="flex min-h-screen w-screen">
             <!--========== Sidebar ==========-->
             <!-- Top -->
             <aside class="bg-slate-100 w-72 border-r border-gray-200 flex flex-col">
                 <div class="flex-1 overflow-y-auto min-h-0 p-4">
-                    <p class="text-gray-900 text-4xl font-semi-bold mr-auto py-8 mb-10 ml-4">Notanizer</p>
+                    <img src="{% static 'Logo/N_slate1.jpg' %}" alt="Notanizer" class="w-42 h-42">
 
                     <!-- Searchbar -->
                     <div class="relative mb-4">
@@ -37,7 +37,7 @@
                     </div>
 
                     <!--My courses-->
-                    <div class="flex items-center justify-between mt-10 w-full">
+                    <div class="flex items-center justify-between mt-10 w-full mb-4">
                         <p class="text-xl font-semi-bold justify-start">My Courses</p>
                         <a href="{% url 'create_course' %}" class="bg-blue-400 hover:bg-blue-500 text-black rounded-lg block text-center font-medium px-4 py-1 ml-auto"> 
                             + New 
@@ -45,11 +45,11 @@
                     </div>
 
                     <!-- Course List(Tree structure) -->
-                    <div class="mt-4 justify-between overflow-y-auto">
+                    <div class="mt-2 justify-between overflow-y-auto">
                         {% for course in courses %}
-                            <input type="checkbox" id="course-{{ course.id }}" class="hidden" unchecked>
-                            <label for="course-{{ course.id }}" class="course-header flex items-center justify-between p-3 rounded-lg">
-                                <div class="flex flex-1 items-center gap-6 rounded-lg bg-blue-100 px-4 py-1">
+                            <input type="checkbox" id="course-{{ course.id }}" class="hidden" />
+                            <label for="course-{{ course.id }}" class="course-header flex items-center justify-between py-1 rounded-lg">
+                                <div class="flex flex-1 items-center gap-6 rounded-lg border border-gray-300 hover:bg-gray-200 hover:border-2 hover:border-blue-500 hover:font-bold px-3">
                                     <span class="toggle text-gray-400"></span>
                                     <a href="{% url 'course_detail' course.id %}" class="text-sm text-gray-900 hover:text-blue-700">
                                         {{ course.title }}
@@ -101,7 +101,7 @@
             </aside>
 
             <!--========== Main content ==========-->
-            <main id="main-content" class="flex-1 bg-slate-50 min-w-0 p-8">
+            <main id="main-content" class="relative flex-1 bg-slate-50 min-w-0 p-8">
             {% block content %}
             {% endblock %}
             </main>

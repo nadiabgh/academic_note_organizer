@@ -12,7 +12,7 @@
                 Create Note
             {% endif %}
         </h1>
-        <form method="POST" class="space-y-6">
+        <form method="POST" class="space-y-6" enctype="multipart/form-data">
             {% csrf_token %}
 
             <!-- Note Title -->
@@ -47,8 +47,7 @@
 
             <!-- Note Content -->
             <div>
-                <label for="{{ form.description.id_for_label }}"
-                       class="block text-sm font-medium text-gray-500 mb-3">
+                <label for="{{ form.content.id_for_label }}" class="block text-sm font-medium text-gray-500 mb-3">
                     Content
                 </label>
                 {{ form.content }}
@@ -57,6 +56,52 @@
                     <p class="text-red-500 text-sm mt-2">
                         {{ form.content.errors }}
                     </p>
+                {% endif %}
+            </div>
+
+            <!-- Image Upload -->
+            <div>
+                <label class="block text-sm font-medium text-gray-500 mb-3">Image</label>
+                {% if form.instance.image %}
+                    <div class="flex items-center justify-between mb-3">
+                        <a href="{{ form.instance.image.url }}" class="text-blue-500 hover:underline" target="_blank">View Current Image</a>
+                        <label class="flex items-center gap-2 text-red-500 text-red-500 txt-sm">
+                            <button type="submit" name="remove_image" value="1" class="text-red-500 hover:text-red-700">
+                                Remove
+                            </button>
+                        </label>
+                    </div>
+                {% endif %}
+
+                {{ form.image }}
+                <label for="{{ form.image.id_for_label }}" class="block w-full rounded-xl border border-gray-300 bg-slate-100 px-4 py-3 text-center hover:bg-slate-200 cursor-pointer transition">
+                    Upload Image
+                </label>
+                {% if form.image.errors %}
+                    <p class="text-red-500 text-sm mt-2">{{ form.image.errors }}</p>
+                {% endif %}
+            </div>
+
+            <!-- File Upload -->
+            <div>
+                <label class="block text-sm font-medium text-gray-500 mb-3">File</label>
+                {% if form.instance.file %}
+                    <div class="flex items-center justify-between mb-3">
+                        <a href="{{ form.instance.file.url }}" class="text-blue-500 hover:underline" target="_blank">View Current File</a>
+                        <label class="flex items-center gap-2 text-red-500 text-red-500 txt-sm">
+                            <button type="submit" name="remove_file" value="1" class="text-red-500 hover:text-red-700">
+                                Remove
+                            </button>
+                        </label>
+                    </div>
+                {% endif %}
+
+                {{ form.file }}
+                <label for="{{ form.file.id_for_label }}" class="block w-full rounded-xl border border-gray-300 bg-slate-100 px-4 py-3 text-center hover:bg-slate-200 cursor-pointer transition">
+                    Attach File
+                </label>
+                {% if form.file.errors %}
+                    <p class="text-red-500 text-sm mt-2">{{ form.file.errors }}</p>
                 {% endif %}
             </div>
 

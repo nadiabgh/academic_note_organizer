@@ -6,22 +6,22 @@
 
     <!-- Breadcrumb -->
     <div class="mb-2">
-        <a href="{% url 'home' %}" class="text-sm text-blue-500 hover:text-blue-600">Home</a>
+        <a href="{% url 'home' %}" class="text-sm text-blue-500 hover:text-blue-600 hover:underline">Home</a>
         <span class="mx-2 text-blue-500">/</span>
         <span class="text-sm text-blue-500 font-medium">{{ course.title }}</span>
     </div>
 
     <!-- Header -->
-    <div class="flex items-center justify-between mb-8 gap-4">
+    <div class="flex items-center justify-between mb-8 gap-4 mt-6">
         <h1 class="text-4xl font-bold text-gray-900">Notes</h1>
-        <a href="{% url 'create_note' course.id %}" class="bg-blue-400 hover:bg-blue-500 text-black rounded-lg block text-center font-medium px-4 py-1 h-fit ml-auto"> 
+        <a href="{% url 'create_note' course.id %}" class="bg-blue-400 hover:bg-blue-500 text-black rounded-lg block text-center font-medium px-6 py-1 h-fit ml-auto"> 
             + New 
         </a>
     </div>
 
     <!-- Total Notes Grid -->
     {% if course.notes.all %}
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 mb-8">
+        <div class="grid grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 mb-8">
             {% for note in course.notes.all %}
                 <a href="{% url 'note_detail' note.id %}" class="bg-white rounded-lg border border-gray-200 overflow-hidden mt-4 transition duration-200 ease-out hover:-translate-y-2 hover:shadow-xl hover:border-blue-300 active:-translate-y-1.5">
                     <img src="{% static 'covers/Notes.jpg'%}" alt="{{ note.title }}" class="w-full h-48 object-cover">

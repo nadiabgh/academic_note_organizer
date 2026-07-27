@@ -32,6 +32,12 @@ def course_detail(request, course_id):
 def note_detail(request, note_id):
     note = get_object_or_404(Note, id=note_id, course__author=request.user)
     courses = Course.objects.filter(author=request.user)
+    if request.method == "POST":
+        if request.FILES.get('image'):
+            note.image = request.FILES['image']
+        if request.FILES.get('file'):
+            note.file = request.FILES['file']
+        note.save()
     return render(request, 'notes/detail.html', {'note': note, 'courses': courses})
 
 @login_required
@@ -90,6 +96,17 @@ def edit_note(request, note_id):
     note = get_object_or_404(Note, id=note_id, course__author = request.user)
     courses = Course.objects.filter(author=request.user)
     if request.method == 'POST':
+        if "remove_image" in request.POST:
+            note.image.delete(save=False)
+            note.image = None
+            note.save()
+            return redirect('edit_note', note.id)
+        if "remove_file" in request.POST:
+            note.file.delete(save=False)
+            note.file = None
+            note.save()
+            return redirect('edit_note', note.id)
+
         form = NoteForm(request.POST, request.FILES, instance=note)
         if form.is_valid():
             form.save()
@@ -111,6 +128,7 @@ def delete_note(request, note_id):
 @login_required
 def search(request):
     query = request.GET.get("q", "")
-    courses = Course.objects.filter(author=request.user, title__icontains=query)
-    notes = Note.objects.filter(course__author=request.user).filter(Q(title__icontains=query) | Q(content__icontains=query))
-    return render(request, 'search/result.html', {'query': query, 'courses': courses, 'notes': notes})
+    courses = Course.objects.filter(author=request.user)
+    course_results = Course.objects.filter(author=request.user, title__icontains=query)
+    note_results = Note.objects.filter(course__author=request.user, title__icontains=query)
+    return render(request, 'search/result.html', {'query': query, 'courses': courses, 'course_results': course_results, 'note_results': note_results})
