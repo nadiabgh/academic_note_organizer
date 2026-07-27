@@ -98,26 +98,65 @@ Stores notes that belong to a specific course.
 ## Installation
 
 ### Clone the repository
+```bash
 git clone https://github.com/nadiabgh/academic_note_organizer.git
-cd academic_note_organizer### Install dependencies
-pip install -r requirements.txt### Apply migrations
-python manage.py migrate### Run the development server
-python manage.py runserverOpen your browser and visit:
+cd academic_note_organizer
+```
+
+### Install dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### Apply migrations
+```bash
+python manage.py migrate
+```
+
+### Run the development server
+```bash
+python manage.py runserver
+```
+
+Open your browser and visit:
+```text
 http://127.0.0.1:8000/---
+```
+
+---
 
 ## Running with Docker
 
 ### Build and start the project
-docker compose up --build### Run the project
-docker compose up### Stop the containers
+```bash
+docker compose up --build
+```
+
+### Run the project
+```bash
+docker compose up
+```
+
+### Stop the containers
+```bash
 docker compose down---
+```
+
+---
 
 ## Running Tests
 
 Run tests locally:
-python manage.py testor run tests inside Docker:
-docker compose exec web python manage.py test
+```bash
+python manage.py test
+```
 
+or run tests inside Docker:
+```bash
+docker compose exec web python manage.py test
+```
+
+---
 
 ## Project Structure
 
