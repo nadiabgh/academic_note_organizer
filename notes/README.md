@@ -118,62 +118,47 @@ docker compose exec web python manage.py test---
 
 
 ## Project Structure
-Notanizer/
-│
-├── Notanizer/
-│   ├── migrations/
-│   │   └── Database migration files
-│   │
-│   ├── static/
-│   │   └── CSS, JavaScript, images, fonts, and other static assets
-│   │
-│   ├── templates/
-│   │   ├── courses/
-│   │   │   └── Course-related templates
-│   │   ├── notes/
-│   │   │   └── Note-related templates
-│   │   ├── registration/
-│   │   │   └── Login and sign-up templates
-│   │   └── search/
-│   │       └── Search results template
-│   │
-│   ├── models.py
-│   │   └── Defines the User, Course, and Note models
-│   │
-│   ├── views.py
-│   │   └── Handles application logic and HTTP requests
-│   │
-│   ├── forms.py
-│   │   └── Defines Django forms for authentication, courses, and notes
-│   │
-│   ├── urls.py
-│   │   └── URL routing for the application
-│   │
-│   ├── tests.py
-│   │   └── Unit tests for models and views
-│   │
-│   ├── admin.py
-│   │   └── Registers models for the Django admin panel
-│   │
-│   └── ...
-│
-├── media/
-│   └── Stores uploaded images and files
-│
-├── Dockerfile
-│   └── Docker image configuration
-│
-├── docker-compose.yml
-│   └── Defines the Docker services(web and PostgreSQL)
-│
-├── requirements.txt
-│   └── Python project dependencies
-│
-├── manage.py
-│   └── Django command-line utility
-│
-└── README.md
-    └── Project documentation
+
+The project is organized as a Django-based web application following the Model-View-Template (MVT) architecture. The structure separates configuration, application logic, database models, templates, and static resources to maintain a clean and scalable codebase.
+
+The main project directory contains the core Django configuration files:
+
+- settings.py: Defines project configuration, installed applications, database settings, static files configuration, and other Django settings.
+- urls.py: Handles the main URL routing and connects different application paths.
+- asgi.py and wsgi.py: Provide server configuration for deploying the Django application.
+
+The application contains the main backend components:
+
+- models.py: Defines the database models and relationships between users, courses, and notes.
+- views.py: Contains the business logic and handles requests, responses, and data processing.
+- urls.py: Defines application-specific URL routes.
+- forms.py: Handles user input, validation, and form processing.
+- admin.py: Registers models and configures the Django administration interface.
+- apps.py: Contains application configuration.
+
+The templates directory contains all HTML files responsible for rendering the user interface. It follows Django's template inheritance system and includes:
+
+- base.html: The main layout template shared across the application, containing common structure, styling references, and reusable components
+- registration/: Contains authentication-related templates such as login and signup pages
+- courses/: Contains templates for course management, including displaying courses, viewing course details, creating, editing, and deleting courses.
+- notes/: Contains templates for note management, including creating, editing, viewing, and deleting notes
+
+The static directory contains frontend resources used by the application:
+
+- CSS files: Define the application's appearance and layout.
+- JavaScript files: Handle interactive features and client-side behavior.
+- Images and other assets: Store visual resources used throughout the interface.
+
+The media directory stores uploaded files and user-generated content.
+
+Additional project files include:
+
+- manage.py: Django's command-line utility used for running the development server, creating migrations, and managing project operations
+- requirements.txt: Contains the project's Python dependencies
+- README.md: Provides documentation and information about the project
+
+This organization follows Django's recommended structure by separating backend functionality, database management, user interface templates, and static resources into dedicated sections
+
 ---
 
 ## Author
