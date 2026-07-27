@@ -99,9 +99,9 @@ Stores notes that belong to a specific course.
 
 ### Clone the repository
 git clone https://github.com/nadiabgh/academic_note_organizer.git
-cd notes### Install dependencies
-pip install -r requirements.txt### Apply migrations
-python manage.py migrate### Run the development server
+cd notes ### Install dependencies
+pip install -r requirements.txt ### Apply migrations
+python manage.py migrate ### Run the development server
 python manage.py runserverOpen your browser:
 http://127.0.0.1:8000/---
 
