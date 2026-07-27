@@ -69,15 +69,6 @@ Stores notes that belong to a specific course.
 
 ---
 
-## Entity Relationship
-User
- │
- └──── Course
-          │
-          └──── Note (A user can create multiple courses, and each course can contain multiple notes)
-
----
-
 ## Technologies
 
 ### Backend
